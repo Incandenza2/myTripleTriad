@@ -1,0 +1,68 @@
+body {
+    margin: 0px;
+}
+
+#content {
+    display:flex;
+    width:auto;
+    height:auto;
+}
+
+.gameFrame {
+    display:flex;
+    width: auto;
+    height: auto;
+}
+
+.board {
+    display:flex;
+    border-style: solid;
+    height:800px;
+    width:800px;
+}
+
+.cardHand {
+    border-style: solid;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 300px;
+    height: 800px;
+}
+
+.card {
+    border-style: solid;
+    display:flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-shrink: 1;
+    margin-bottom: -200px;
+    justify-content: space-between;
+    align-items: center;
+    width: 290px;
+    height: 290px;
+    background-color: aliceblue;
+}
+
+.cardPicture {
+    margin: 0;
+    width:200px;
+    height: 200px;
+}
+
+.card:hover {
+    z-index: 5;
+}
+
+.card-top{
+    margin: 8px;
+}
+.card-middle{
+    display: flex; 
+    justify-content:space-between;
+    align-items: center;
+    width: 100%;
+}
+.card-right{margin: 8px;}
+.card-left{margin: 8px;}
+.card-bottom{margin: 8px;}
