@@ -1,68 +1,113 @@
 body {
     margin: 0px;
+    user-select: none;
+    background: linear-gradient(rgba(133, 14, 14, 0.363), rgba(133, 14, 14, 0.363)), url(./images/Patterns/fancy-cushion.png);
+    background-size: 650px;
 }
 
 #content {
     display:flex;
+    justify-content: center;
     width:auto;
     height:auto;
 }
 
 .gameFrame {
     display:flex;
+    justify-content: center;
     width: auto;
     height: auto;
 }
 
-.board {
+.table {
+    padding-left: 2px;
+    padding-top: 2px;
+    margin-top: 8px;
     display:flex;
+    flex-wrap: wrap;
     border-style: solid;
-    height:800px;
-    width:800px;
+    border-color:rgb(15, 63, 221, 0.5) rgb(252, 107, 139, 0.5) rgb(252, 107, 139, 0.5) rgb(15, 63, 221, 0.5) ;
+    height:690px;
+    width:690px;
+    background: linear-gradient(rgba(224, 191, 117, 0.363), rgba(116, 74, 18, 0.397)), url(./images/Patterns/vertical_cloth.png);
+}
+
+.square {
+    border-style: solid;
+    border-width: 1px;
+    width: 230px;
+    height: 230px;
+    margin: -1px;
+}
+
+.dropZone {
+    background: grey;
+    opacity: 50%;
 }
 
 .cardHand {
-    border-style: solid;
+    padding-top: 24px;
+    border-style: none;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    align-items: center;
     width: 300px;
-    height: 800px;
+    height: auto;
+
 }
 
 .card {
-    border-style: solid;
+    border-style:groove;
+    border-width: 2px;
     display:flex;
     flex-direction: column;
     flex-wrap: nowrap;
     flex-shrink: 1;
-    margin-bottom: -200px;
-    justify-content: space-between;
+    margin-bottom: -110px;
+    justify-content: center;
+    gap: 8px;
     align-items: center;
-    width: 290px;
-    height: 290px;
-    background-color: aliceblue;
+    transition: transform 0.3s;
+    width: 225px;
+    height: 225px;
+    background: linear-gradient(rgba(252, 107, 139, 0.45), rgba(201, 140, 150,0.45)), url(./images/Patterns/paper/textured_paper.png);
+}
+
+.card.playerCard {
+    background: linear-gradient(rgba(15, 63, 221, 0.45), rgba(67, 84, 110, 0.45)), url(./images/Patterns/paper/textured_paper.png);
 }
 
 .cardPicture {
     margin: 0;
-    width:200px;
-    height: 200px;
+    width:150px;
+    height: 150px;
 }
 
-.card:hover {
+.isInHand {
+    border-width: 3px;
+}
+.isInHand:hover {
     z-index: 5;
+    transform:  translateY(-20px);
+    transition: transform 0.6s;
 }
 
 .card-top{
-    margin: 8px;
+    margin: 0px;
 }
 .card-middle{
     display: flex; 
-    justify-content:space-between;
+    justify-content:center;
     align-items: center;
+    gap: 13px;
     width: 100%;
 }
-.card-right{margin: 8px;}
-.card-left{margin: 8px;}
-.card-bottom{margin: 8px;}
+.card-right{margin: 0;}
+.card-left{margin: 0}
+.card-bottom{margin: 0px;}
+
+.card-top, .card-right, .card-left, .card-bottom {
+    text-shadow:1px 1px wheat;
+    font-size: larger;
+}
