@@ -3,9 +3,11 @@ body {
     user-select: none;
     background: linear-gradient(rgba(133, 14, 14, 0.363), rgba(133, 14, 14, 0.363)), url(./images/Patterns/fancy-cushion.png);
     background-size: 650px;
+    transition: filter 2s;
 }
 
 #content {
+    margin:0;
     display:flex;
     justify-content: center;
     width:auto;
@@ -17,6 +19,7 @@ body {
     justify-content: center;
     width: auto;
     height: auto;
+    transition: filter 2s;
 }
 
 .table {
@@ -57,7 +60,7 @@ body {
 
 }
 
-.card {
+.card{
     border-style:groove;
     border-width: 2px;
     display:flex;
@@ -68,7 +71,7 @@ body {
     justify-content: center;
     gap: 8px;
     align-items: center;
-    transition: transform 0.6s;
+    transition: transform 0.6s, position 0.3s;
     transition-timing-function:(0.0, 0.0, 0.58, 1.0);
     width: 225px;
     height: 225px;
@@ -118,3 +121,64 @@ body {
     transform: rotateY(90deg);
     transition-timing-function: (0.42, 0.0, 1.0, 1.0);
 }
+
+.pickableCard {
+    transition: transform 0.2s, opacity 0.5s;
+}
+.pickableCard:hover{
+    transform: scale(1.04);
+}
+
+.result {
+    margin: 0;
+    position:absolute;
+    align-self: center;
+    height: max-content;
+    width: max-content;
+    text-shadow: 3px 2px #dad2d2;
+    color: rgb(202, 166, 66);
+    opacity: 0;
+    font-size: 130px;
+    font-style:italic;
+    transition: opacity 2s;
+}
+
+.draw {
+    color: #575c34;
+}
+
+.win {
+    color: #135d89;
+}
+
+.loss {
+    color: #6a4145;
+}
+
+.result.resultFadeIn {
+    opacity: 100;
+}
+
+.blur {
+    filter: blur(3px);
+}
+
+.cardChoices {
+    display:flex;
+    position: absolute;
+    align-self: flex-end;
+    height:auto;
+    width: auto;
+    gap: 10px;
+    margin-bottom: 100px;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+.cardChoices.visible {
+    opacity: 1;
+}
+
+
+

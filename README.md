@@ -15,3 +15,9 @@ First goal: Build a factory function for card objects and create 2 cards. Try an
     Main challenges: The game system itself: defining the top bottom left and right properties and getting them to interact as expected through array index relationships somehow, maybe.
 
 Second goal: Create levels for the start game function to define the tiers of cards the opponent will have.
+
+
+W/R/T card tiers: Let's try, tentatively, to give a total score amount to tiers as such:
+    Tier 3 cards: 10 to 15 total points.
+    Tier 2 cards: 16 to 21 total points.
+    Tier 1 cards: 22 onwards.

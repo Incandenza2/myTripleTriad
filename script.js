@@ -35,21 +35,15 @@ const cardFactory = (name, top, right, bottom, left, tier) => {
 
 let cardAntónioCosta = Object.create(cardFactory, {
     "name": {value: "António Costa"},
-    "top": {value: "3"},
-    "right": {value: "4"},
-    "bottom": {value: "3"},
-    "left": {value: "4"},
+    "top": {value: "3"}, "right": {value: "4"}, "bottom": {value: "3"}, "left": {value: "4"},
     "tier": {value: "3"},
     "status": {value: "", writable: true},
     "image": {value: "./images/antónioCosta.png"}
 });
 
 let cardJoca = Object.create(cardFactory, {
-    "name": {value:"Joca"},
-    "top": {value: "1"},
-    "right": {value: "2"},
-    "bottom": {value: "7"},
-    "left": {value: "2"},
+    "name": {value:"Joca"}, 
+    "top": {value: "1"}, "right": {value: "2"}, "bottom": {value: "7"},"left": {value: "2"},
     "tier": {value: "3"},
     "status": {value: "", writable: true},
     "image": {value: "./images/Joca.png"}
@@ -57,10 +51,7 @@ let cardJoca = Object.create(cardFactory, {
 
 let cardKojima = Object.create(cardFactory, {
     "name": {value:"Hideo Kojima"},
-    "top": {value: "6"},
-    "right": {value: "3"},
-    "bottom": {value: "6"},
-    "left": {value: "3"},
+    "top": {value: "6"}, "right": {value: "3"}, "bottom": {value: "6"}, "left": {value: "3"},
     "tier": {value: "2"},
     "status": {value: "", writable: true},
     "image": {value: "./images/Kojima.png"}
@@ -68,10 +59,7 @@ let cardKojima = Object.create(cardFactory, {
 
 let cardSexHaver = Object.create(cardFactory, {
     "name": {value:"Sex Haver"},
-    "top": {value: "6"},
-    "right": {value: "9"},
-    "bottom": {value: "9"},
-    "left": {value: "6"},
+    "top": {value: "5"}, "right": {value: "9"}, "bottom": {value: "5"}, "left": {value: "6"},
     "tier": {value: "1"},
     "status": {value: "", writable: true},
     "image": {value: "./images/sexHaver.png"}
@@ -79,18 +67,32 @@ let cardSexHaver = Object.create(cardFactory, {
 
 let card1984 = Object.create(cardFactory, {
     "name": {value:"1984"},
-    "top": {value: "1"},
-    "right": {value: "8"},
-    "bottom": {value: "4"},
-    "left": {value: "9"},
+    "top": {value: "1"}, "right": {value: "8"}, "bottom": {value: "4"}, "left": {value: "9"},
     "tier": {value: "1"},
     "status": {value: "", writable: true},
     "image": {value: "./images/1984.png"}
 });
 
+let cardShrike = Object.create(cardFactory, {
+    "name": {value:"Shrike"},
+    "top": {value: "7"}, "right": {value: "7"}, "bottom": {value: "4"}, "left": {value: "7"},
+    "tier": {value: "1"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/Shrike.png"}
+});
+
+let cardMachoLatino = Object.create(cardFactory, {
+    "name": {value: "Macho Latino"},
+    "top": {value: "4"}, "right": {value: "5"}, "bottom": {value: "3"}, "left": {value: "1"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/machoLatino.png"}
+});
+
+
 
 // REMEMBER TO ADD TO THE ARRAY
-const cardArray = [cardAntónioCosta, cardJoca, cardKojima, cardSexHaver, card1984];
+const cardArray = [cardAntónioCosta, cardJoca, cardKojima, cardSexHaver, card1984, cardShrike, cardMachoLatino];
 
 const tier3 = cardArray.filter((obj) => {return obj.tier === "3"})
 const tier2 = cardArray.filter((obj) => {return obj.tier === "2"});
@@ -110,7 +112,7 @@ let opponent1 = Object.create(opponentFactory, {
 
 const board = (() => {
     
-    let drawBoard = function(boardState, turn, cardsFlipped) {
+    let drawBoard = function(boardState, turn, cardsFlipped, opponentHand) {
         let table = document.querySelector(".table")
         table.replaceChildren("");
         boardState.forEach((item,index) => {    
@@ -137,18 +139,6 @@ const board = (() => {
                         console.log(cardsFlipped)
                     });
                 };
-            //check for game ending!
-            if (turn === "over") {
-                let playerCount = boardState.filter((obj) => {obj.status === "player"}).length;
-                let opponentCount = boardState.filter((obj) => {obj.status === "opponent"}).length;
-                if (playerCount === opponentCount) {
-                    /*show draw and restart the game*/
-                } else if (playerCount > opponentCount) {
-                /*announce win, record something like "level X = 'beaten'", let player pick a card from the opponent's hand
-                
-                userMenu.endGame(playerCount)*/
-                }
-            };
 
             } else if ((item === 0) && (turn === "player")) {
                 square.addEventListener("dragover", function(event) {event.preventDefault()}, false);
@@ -175,6 +165,35 @@ const board = (() => {
         if (turn === "opponent") {
             setTimeout(function() {gameLogic.opponentPlay(boardState)}, 1500);
         }
+        //check for game ending!
+        if (turn === "over") {
+            let playerCount = boardState.filter((obj) => {return obj.status === "player"}).length;
+            let opponentCount = boardState.filter((obj) => {return obj.status === "opponent"}).length;
+            setTimeout(function() {
+                let gameFrame = document.querySelector(".gameFrame");
+                gameFrame.classList.add("blur")}, 600);
+            if (playerCount === opponentCount) {
+                let result = dom.addElement("#content", "div", "result");
+                result.textContent = "Draw";
+                result.classList.add("draw");
+                setTimeout(function() {result.classList.add("resultFadeIn")}, 600);
+                /*show draw and restart the game*/
+            } else if (playerCount > opponentCount) {
+                let result = dom.addElement("#content", "div", "result");
+                result.textContent = "You won";
+                result.classList.add("win");
+                minorMenuMethods.executeCardChoice(result);
+            } else if (playerCount < opponentCount) {
+                let result = dom.addElement("#content", "div", "result");
+                result.textContent = "You lost";
+                result.classList.add("loss");
+                setTimeout(function() {result.classList.add("resultFadeIn")}, 600);
+                //go back to the menu and maybe remove a card from the player if he has more than 5 cards!
+            }
+            /*announce win, record something like "level X = 'beaten'", let player pick a card from the opponent's hand
+            
+            userMenu.endGame(playerCount)*/
+        };
     }
     return {drawBoard};
 })();
@@ -296,7 +315,7 @@ const gameLogic = (() => {
 // each card will have a card-top, a card-middle, and a card-bottom. The card-middle will have card-left and card-right elements.
 
 const cardDrawing = (() => {
-    let drawCard = function(parentNode, card, index) {
+    let drawCard = function(parentNode, card, owner) {
         let currentCard = document.createElement("div");
         currentCard.classList.add("card");
         parentNode.appendChild(currentCard);
@@ -315,7 +334,7 @@ const cardDrawing = (() => {
         let cardPicture = document.createElement("img");
         cardPicture.setAttribute("src", `${card.image}`);
         cardPicture.classList.add("cardPicture");
-        if (parentNode !== cardHandPlayer)  {cardPicture.setAttribute("ondragstart", "return false")};
+        if (owner === "player")  {cardPicture.setAttribute("ondragstart", "return false")};
         cardPicture.setAttribute("draggable", "false");
         cardMiddle.appendChild(cardPicture);
         let cardRight = document.createElement("div");
@@ -326,7 +345,7 @@ const cardDrawing = (() => {
         cardBottom.classList.add("card-bottom");
         cardBottom.textContent = `${card.bottom}`;
         currentCard.appendChild(cardBottom);
-        if (parentNode === cardHandPlayer) {currentCard.classList.toggle("playerCard")};
+        if (owner === "player") {currentCard.classList.toggle("playerCard")};
         if (card.tier === "2") {currentCard.style.borderColor = "purple"};
         if (card.tier === "1") {currentCard.style.borderColor = "#ffe0389c"};
         
@@ -342,24 +361,105 @@ const cardDrawing = (() => {
     3 - class tag to give to it 
     4 - optional text for the textContent */
 
-let gameFrame = dom.addElement("#content", "div", "gameFrame");
-let cardHandPlayer = dom.addElement(".gameFrame", "div", "cardHand");
-cardHandPlayer.classList.add("cardHandPlayer");
-dom.addElement(".gameFrame", "div", "table");
-let cardHandOpponent = dom.addElement(".gameFrame", "div", "cardHand");
-cardHandOpponent.classList.add("cardHandOpponent");
+const buildFrame = function() {
+    let gameFrame = dom.addElement("#content", "div", "gameFrame");
+    let cardHandPlayer = dom.addElement(".gameFrame", "div", "cardHand");
+    cardHandPlayer.classList.add("cardHandPlayer");
+    dom.addElement(".gameFrame", "div", "table");
+    let cardHandOpponent = dom.addElement(".gameFrame", "div", "cardHand");
+    cardHandOpponent.classList.add("cardHandOpponent");
+};
+
 let dragged;
 
-let playerHand = [cardJoca, cardKojima, cardKojima, cardSexHaver, cardAntónioCosta]
-let opponentHand = [cardJoca, cardAntónioCosta, cardSexHaver, cardJoca, cardAntónioCosta]
-console.log(playerHand);
+const minorMenuMethods = (() => {
+    let executeCardChoice = (result) => {
+        setTimeout(function() {result.classList.add("resultFadeIn")}, 600);
+                setTimeout(function() {
+                    let cardChoices = dom.addElement("#content", "div", "cardChoices")
+                    setTimeout(function() {cardChoices.classList.add("visible")}, 10);
+                    let cardsAvailable = currentOpponent.cardSet.map((x)=>x);
+                    let added = 0;
+                    cardsAvailable.forEach((item,index) => {
+                        let pickableCard = cardDrawing.drawCard(cardChoices, item);
+                        pickableCard.classList.add("pickableCard");
+                        pickableCard.addEventListener("click", (event) => {
+                            if (added === 0) {
+                                playerCardArray.push(Object.create(cardArray.filter((obj) =>{return obj.name === pickableCard.getAttribute("id")})[0])); 
+                                added = 1;
+                                pickableCard.classList.remove("pickableCard");
+                           
+                                setTimeout(function() {pickableCard.classList.toggle("flip1")}, 210);
+                                setTimeout(function() {
+                                    pickableCard.classList.toggle("playerCard");
+                                    pickableCard.classList.toggle("flip1");
+                                }, 600);
+                                setTimeout(function() {
 
-function generateCardHand (player, array) {
-    array.forEach(function(card, index) {
-        let currentCard = cardDrawing.drawCard(player, card);
+                                }, 4000) //some animation
+                                setTimeout(function(){/*go back to main menu*/}, 5000)}
+                            }, {once: true});
+                            
+    
+
+                            })
+                    }, 2000);
+    }
+    return {executeCardChoice}
+})();
+
+const cardSorting = (function() {
+    const playerCardHandSorting = function () {
+        let cardSetFormula = {
+            tier3: "5",
+            tier2: "0",
+            tier1: "0",
+        };
+        let cardSet = []
+        for (let i = 0; i < cardSetFormula.tier3; i++) {
+            cardSet.unshift(tier3[Math.floor(Math.random() * tier3.length)])
+        };
+        for (let i = 0; i < cardSetFormula.tier2; i++) {
+            cardSet.unshift(tier2[Math.floor(Math.random() * tier2.length)])
+        };
+        for (let i = 0; i < cardSetFormula.tier1; i++) {
+            cardSet.unshift(tier1[Math.floor(Math.random() * tier1.length)])
+        };
+        return cardSet;
+        
+    };
+    const opponentCardHandSorting = function (cardSetFormula) {
+        let cardSet = []
+        for (let i = 0; i < cardSetFormula.tier3; i++) {
+            cardSet.unshift(tier3[Math.floor(Math.random() * tier3.length)])
+        };
+        for (let i = 0; i < cardSetFormula.tier2; i++) {
+            cardSet.unshift(tier2[Math.floor(Math.random() * tier2.length)])
+        };
+        for (let i = 0; i < cardSetFormula.tier1; i++) {
+            cardSet.unshift(tier1[Math.floor(Math.random() * tier1.length)])
+        };
+        return cardSet;
+        
+    };
+    return {playerCardHandSorting, opponentCardHandSorting}
+
+})();
+
+// this only runs once, right at the start; we might put it into a first screen IIFE and return the object  
+let playerCardArray = cardSorting.playerCardHandSorting();
+let playerHand = [card1984, cardAntónioCosta, cardJoca, cardKojima, cardJoca]
+// we shall generate a hand for every opponent when the page first loads.
+opponent1["cardSet"] = cardSorting.opponentCardHandSorting(opponent1.cardSetFormula);
+
+
+
+function generateCardHand (player, cardSet, owner) {
+    cardSet.forEach(function(card, index) {
+        let currentCard = cardDrawing.drawCard(player, card, owner);
         currentCard.classList.toggle("isInHand");
-        if (array === playerHand) {currentCard.setAttribute("owner", "player")}
-        if (array === opponentHand) {currentCard.setAttribute("owner", "opponent")}
+        if (owner === "player") {currentCard.setAttribute("owner", "player")}
+        if (owner === "opponent") {currentCard.setAttribute("owner", "opponent")}
         if (currentCard.getAttribute("owner") === "player") {
             currentCard.setAttribute("draggable", "true");
             currentCard.addEventListener("drag", function(event) {}, false);
@@ -369,29 +469,29 @@ function generateCardHand (player, array) {
     });
 };
 
-const opponentCardHandSorting = function (cardSetFormula) {
-    let cardSet = []
-    for (let i = 0; i < cardSetFormula.tier3; i++) {
-        cardSet.unshift(tier3[Math.floor(Math.random() * tier3.length)])
-    };
-    for (let i = 0; i < cardSetFormula.tier2; i++) {
-        cardSet.unshift(tier2[Math.floor(Math.random() * tier2.length)])
-    };
-    for (let i = 0; i < cardSetFormula.tier1; i++) {
-        cardSet.unshift(tier1[Math.floor(Math.random() * tier1.length)])
-    };
-    return cardSet;
+let currentOpponent;
+
+const startGame = function (playerHand, opponent) {
+    let content = document.querySelector("#content")
+    content.replaceChildren("");
+    buildFrame();
+    let cardHandPlayer = content.querySelector(".cardHandPlayer");
+    let cardHandOpponent = content.querySelector(".cardHandOpponent");
+    let turn;
+    currentOpponent = opponent;
+    if (Math.random() >= (1/2)) {turn = "player"} else {turn = "opponent"};
+    generateCardHand(cardHandPlayer, playerHand, "player");
+    generateCardHand(cardHandOpponent, opponent["cardSet"], "opponent");
+    let boardState = [0,0,0,0,0,0,0,0,0];
+    board.drawBoard(boardState, turn);
     
 };
 
-const startGame = function (playerHand, opponent) {
-    let turn;
-    if (Math.random() >= (1/2)) {turn = "player"} else {turn = "opponent"};
-    let cardSet = opponentCardHandSorting(opponent.cardSetFormula)
-    generateCardHand(cardHandPlayer, playerHand);
-    generateCardHand(cardHandOpponent, cardSet);
-    let boardState = [0,0,0,0,0,0,0,0,0];
-    board.drawBoard(boardState, turn);
-};
+/*startGame(playerHand, opponent1);
 
-startGame(playerHand, opponent1);
+
+
+/* WE START THE GAME HERE; BY LETTING THE PLAYER CLICK A SINGLE EXISTING ELEMENT WHICH WILL REVEAL
+THE STARTING SET OF CARDS. THE SET OF CARDS WILL FADE AFTER A FEW SECONDS AND WE'RE ON THE MAIN MENU.
+THE MAIN MENU CAN BE A "LIBRARY" OF LEVELS, WHICH MUST BE UNLOCKED SEQUENTIALLY. BEATING OPPONENT 1
+WILL DO opponent2.unlocked = "yes", etc... IN THIS SCREEN WE WILL HAVE A NICE WAY TO SELECT CARD LOADOUT*/
