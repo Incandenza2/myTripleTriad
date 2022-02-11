@@ -180,5 +180,62 @@ body {
     opacity: 1;
 }
 
+.mainMenuFrame {
+    display: flex;
+    flex-direction: column;
+}
+
+.deckBuildingDiv {
+    display:flex;
+    justify-content: space-between;
+    width: 800px;
+    height: 300px;
+
+}
+
+.deckSelect {
+
+}
+
+.deckDisplay {
+    display:flex;
+    justify-content: center;
+}
+
+.levelLibrary {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 800px;
+    height: 500px;
+}
+
+.level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100px;
+    height: 40px;
+}
+
+.locked {
+    width: auto;
+    height: auto;
+}
+
+.unlocked {
+    width:auto;
+    height:auto;
+}
+
+.displayedCard {
+    position:relative;
+}
+
+.displayedCard:hover{
+    z-index: 2;
+    /*transform:  translateY(+30px);*/
+
+}
 
 
