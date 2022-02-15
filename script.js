@@ -137,11 +137,27 @@ let cardFernandoMendes = Object.create(cardFactory, {
     "image": {value: "./images/FernandoMendes.png"}
 });
 
+let cardHarambe = Object.create(cardFactory, {
+    "name": {value:"Harambe"},
+    "top": {value: "2"}, "right": {value: "1"}, "bottom": {value: "5"}, "left": {value: "5"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/Harambe.png"}
+});
+
+let cardPluto = Object.create(cardFactory, {
+    "name": {value:"Pluto"},
+    "top": {value: "4"}, "right": {value: "4"}, "bottom": {value: "1"}, "left": {value: "5"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/Pluto.png"}
+});
+
 
 
 // REMEMBER TO ADD TO THE ARRAY
 const cardArray = [cardDummy, cardAntónioCosta, cardJoca, cardKojima, cardSexHaver, card1984, cardShrike, cardMachoLatino, cardSaad, cardShrimpPizza, 
-    cardCuco, cardJoséFigueiras, cardFernandoMendes];
+    cardCuco, cardJoséFigueiras, cardFernandoMendes, cardHarambe, cardPluto];
 
 const tier3 = cardArray.filter((obj) => {return obj.tier === "3"})
 const tier2 = cardArray.filter((obj) => {return obj.tier === "2"});
@@ -272,6 +288,8 @@ const board = (() => {
         }
         //check for game ending!
         if (turn === "over") {
+            let returnToMenu = document.querySelector(".returnToMenu")
+            returnToMenu.removeEventListener("click", endSongandLeave)
             let playerCount = boardState.filter((obj) => {return obj.status === "player"}).length;
             let opponentCount = boardState.filter((obj) => {return obj.status === "opponent"}).length;
             setTimeout(function() {
@@ -315,7 +333,8 @@ const board = (() => {
                 result.classList.add("loss");
                 setTimeout(function() {result.classList.add("resultFadeIn")}, 600);
                 setTimeout(function() {menuing.drawMainMenu()}, 4000);
-                setTimeout(function () {minorMenuMethods.stopAudio()}, 3000);/*minorMenuMethods.Maybe have a function here for them stealing a card from you and return to menu*/
+                setTimeout(function () {
+                    if (currentOpponent.level === "8") {minorMenuMethods.stopBossAudio()} else {minorMenuMethods.stopAudio()}}, 3000);
             } else {
                 setTimeout(function() {startGame(playerHand, (currentOpponent.level - 1))}, 4000);
             }
@@ -333,8 +352,6 @@ const board = (() => {
 const gameLogic = (() => {
     const computePlay = function(boardState, squareNumber) {
         let cardsFlipped = [];   
-        console.log("inside computePLay")
-        console.log(boardState[squareNumber])
         if ((squareNumber == 0) | (squareNumber == 3) | (squareNumber == 6)) {
             if ((typeof(boardState[squareNumber - 3]) === "object") && (parseInt(boardState[squareNumber].top) > parseInt(boardState[squareNumber - 3].bottom))) {
                 if (boardState[squareNumber - 3].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber - 3))};
@@ -638,7 +655,7 @@ const cardDrawing = (() => {
         let cardPicture = document.createElement("img");
         cardPicture.setAttribute("src", `${card.image}`);
         cardPicture.classList.add("cardPicture");
-        if (owner === "player")  {cardPicture.setAttribute("ondragstart", "return false")};
+        cardPicture.setAttribute("ondragstart", "return false");
         cardPicture.setAttribute("draggable", "false");
         cardMiddle.appendChild(cardPicture);
         let cardRight = document.createElement("div");
@@ -665,11 +682,18 @@ const cardDrawing = (() => {
     3 - class tag to give to it 
     4 - optional text for the textContent */
 
-const buildFrame = function() {
+let endSongandLeave = function () {
+    if (currentOpponent.level === "8") {minorMenuMethods.stopBossAudio()} else {minorMenuMethods.stopAudio()};
+        menuing.drawMainMenu();
+} /*I know this sucks, but I'm angrily deciding not to spend more time polishing this. I wanted a simple if statement to work inside the returnToMenu eventlistener
+I added and for it to work only if turn wasn't "over", but it wasn't working. So I pulled this function out into the global scope just so I could remove 
+the eventlistener when a game is over.*/
+
+    const buildFrame = function() {
     let gameFrame = dom.addElement("#content", "div", "gameFrame");
     let returnToMenu = dom.addElement("#content", "button", "returnToMenu")
     returnToMenu.textContent = "Leave"
-    returnToMenu.addEventListener("click", () => {menuing.drawMainMenu(); minorMenuMethods.stopAudio();})
+    returnToMenu.addEventListener("click", endSongandLeave);
     let cardHandPlayer = dom.addElement(".gameFrame", "div", "cardHand");
     cardHandPlayer.classList.add("cardHandPlayer");
     dom.addElement(".gameFrame", "div", "table");
@@ -682,7 +706,6 @@ let dragged;
 const minorMenuMethods = (() => {
     let executeCardChoice = (result) => {
         let nextLevel = parseInt(currentOpponent.level);
-        console.log("next level:" + nextLevel);
         if (nextLevel < 8) {
         opponents.opponentArray[nextLevel].unlocked = "yes";
         }
@@ -709,7 +732,8 @@ const minorMenuMethods = (() => {
                         setTimeout(function(){
             
                             menuing.drawMainMenu();
-                            minorMenuMethods.stopAudio();
+                            if(currentOpponent.level === "8") {minorMenuMethods.stopBossAudio(); gameBeaten = 1;} else {minorMenuMethods.stopAudio();}
+                            
                 
                         }, 3000);
                     }
@@ -729,8 +753,20 @@ const minorMenuMethods = (() => {
             }
          }, 100)
     };
+    let stopBossAudio = () => {
+        const fadeAudio = setInterval(() => {
+            if (bossAudio.volume !== 0) {
+            bossAudio.volume -= 0.1
+            }
+      
+         if (bossAudio.volume < 0.003) {
+            clearInterval(fadeAudio)
+            bossAudio.pause();
+            }
+         }, 100)
+    };
             
-    return {executeCardChoice, stopAudio}
+    return {executeCardChoice, stopAudio, stopBossAudio}
 })();
 
 const cardSorting = (function() {
@@ -786,10 +822,9 @@ const cardSorting = (function() {
 })();
 
 // this only runs once, right at the start; we might put it into a first screen IIFE and return the object  
-//let playerCardArray = cardSorting.playerCardHandSorting();
-//let playerHand = playerCardArray.map((x) => x);
-let playerCardArray = [cardJoca, card1984, cardAntónioCosta, cardCuco, cardKojima, cardJoséFigueiras, cardMachoLatino]
-let playerHand = [cardJoca, card1984, cardAntónioCosta, cardCuco, cardKojima]
+let playerCardArray = cardSorting.playerCardHandSorting();
+let playerHand = playerCardArray.map((x) => x);
+
 // we shall generate a hand for every opponent when the page first loads.
 opponents.opponentArray[0]["cardSet"] = cardSorting.opponentCardHandSorting(opponents.opponentArray[0].cardSetFormula);
 opponents.opponentArray[1]["cardSet"] = cardSorting.opponentCardHandSorting(opponents.opponentArray[1].cardSetFormula);
@@ -839,10 +874,14 @@ function specialGenerateCardHand (player, cardSet, owner) {
 let currentOpponent;
 let winCount;
 let lossCount;
+let turn;
 let nextRound;
 let audio = document.createElement("audio");
 audio.setAttribute("src", "./audio/ost.mp3")
 audio.setAttribute("loop", "true");
+let bossAudio = document.createElement("audio");
+bossAudio.setAttribute("src", "./audio/boss.mp3")
+bossAudio.setAttribute("loop", "true");
 
 const startGame = function (playerHand, opponentIndex) {
     let content = document.querySelector("#content")
@@ -850,10 +889,9 @@ const startGame = function (playerHand, opponentIndex) {
     buildFrame();
     let cardHandPlayer = content.querySelector(".cardHandPlayer");
     let cardHandOpponent = content.querySelector(".cardHandOpponent");
-    let turn;
     currentOpponent = opponents.opponentArray[opponentIndex];
-    if (nextRound === undefined) {
-        if (Math.random() >= (1/2)) {turn = "player"; let nextRound = "opponent"} else {turn = "opponent"; let nextRound = "player"};
+    if (nextRound === "random") {
+        if (Math.random() >= (1/2)) {turn = "player"; nextRound = "opponent"} else {turn = "opponent"; nextRound = "player"};
     } else {
         if (nextRound === "opponent") {turn = "opponent", nextRound = "player"} else {turn = "player", nextRound = "opponent"};
     };
@@ -909,15 +947,26 @@ const menuing = (() => {
                 let levelButton = dom.addElement(`#level${i+1}`, "button", "unlocked")
                 levelButton.textContent = `${i+1}: ${opponents.opponentArray[i].name}`;
                 levelButton.addEventListener("click", (event) => {
+                    nextRound = "random";
                     startGame(playerHand, i)
-                    setTimeout(() => {
-                        audio.volume = 1;
-                        audio.play()}, 300);
+                    if (i === 7) {
+                        setTimeout(() => {
+                            bossAudio.volume = 1;
+                            bossAudio.play()}, 300);
+                    } else {
+                        setTimeout(() => {
+                            audio.volume = 1;
+                            audio.play()}, 300);
+                    }
                 });
             };
 
         }
-
+        if (gameBeaten === 1) {
+            let endGameMessage = dom.addElement(".mainMenuFrame", "div", "endGameMessage")
+            endGameMessage.textContent = "Ay, good job beating me. You are a 'love of person'. Your most played card was Joca! Just kidding. Your information is not being collected."
+        }
+        
     }
     const editDeckMenu = () => {
         let content = document.querySelector("#content");
@@ -964,7 +1013,6 @@ const menuing = (() => {
                 })};
             });
             copyPlayerHand.forEach((item, index) => {
-                console.log(index)
                 let cardBox = dom.addElement(".pickedCardsShown", "div", "cardBoxInEditing")
                 let card = cardDrawing.drawCard(cardBox, item, "player");
                 let name = document.createElement("p");
@@ -984,18 +1032,45 @@ const menuing = (() => {
         }
         drawAllCards();
     }
-    return {drawMainMenu, editDeckMenu};
+    return {drawMainMenu};
 })();
+
+let gameBeaten = 0;
 
 //for testing, function to unlock all levels:
 
 for (let i = 0; i < 8; i++) {opponents.opponentArray[i].unlocked = "yes"}
 
-//menuing.drawMainMenu(); REMEMBER TO HIDE THE EDITDECKMENU IN THE MODULE
-menuing.editDeckMenu();
+//menuing.drawMainMenu(); //REMEMBER TO HIDE THE EDITDECKMENU IN THE MODULE
+
 
 
 /* WE START THE GAME HERE; BY LETTING THE PLAYER CLICK A SINGLE EXISTING ELEMENT WHICH WILL REVEAL
 THE STARTING SET OF CARDS. THE SET OF CARDS WILL FADE AFTER A FEW SECONDS AND WE'RE ON THE MAIN MENU.
 THE MAIN MENU CAN BE A "LIBRARY" OF LEVELS, WHICH MUST BE UNLOCKED SEQUENTIALLY. BEATING OPPONENT 1
 WILL DO opponent2.unlocked = "yes", etc... IN THIS SCREEN WE WILL HAVE A NICE WAY TO SELECT CARD LOADOUT*/
+
+const openingScreen = function() {
+    let openingFrame = dom.addElement("#content", "div", "openingFrame")
+    let bags = dom.addElement(".openingFrame", "img", "bags");
+    bags.setAttribute("src", "./images/Bags.png")
+    bags.classList.toggle("visible");
+    bags.addEventListener("click", () => {
+        bags.classList.toggle("visible");
+        setTimeout(function () {openingFrame.removeChild(bags);}, 500);
+        setTimeout(function() {let deckDisplay = dom.addElement(".openingFrame", "div", "openingScreenDeck");
+        let drawDisplayedCards = (function() {
+            for (let i = 0; i < 5; i++) {
+                let displayedCard = cardDrawing.drawCard(deckDisplay, playerHand[i], "player");
+                displayedCard.classList.add("displayedCard");
+            };
+        })();
+        setTimeout(function() {deckDisplay.classList.toggle("visible")},40)
+        let openingText = dom.addElement(".openingFrame", "div", "openingText");
+        openingText.textContent = "Here's your starting set. Go nuts.";
+    }, 500);
+        setTimeout(function() {menuing.drawMainMenu()}, 7000);
+    })
+};
+
+openingScreen();
