@@ -147,21 +147,86 @@ let cardHarambe = Object.create(cardFactory, {
 
 let cardPluto = Object.create(cardFactory, {
     "name": {value:"Pluto"},
-    "top": {value: "4"}, "right": {value: "4"}, "bottom": {value: "1"}, "left": {value: "5"},
+    "top": {value: "4"}, "right": {value: "3"}, "bottom": {value: "1"}, "left": {value: "5"},
     "tier": {value: "3"},
     "status": {value: "", writable: true},
     "image": {value: "./images/Pluto.png"}
 });
 
+let cardGod = Object.create(cardFactory, {
+    "name": {value:"God"},
+    "top": {value: "8"}, "right": {value: "7"}, "bottom": {value: "6"}, "left": {value: "4"},
+    "tier": {value: "1"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/God.png"}
+});
+
+let cardCathyMay = Object.create(cardFactory, {
+    "name": {value:"Cathy May"},
+    "top": {value: "3"}, "right": {value: "3"}, "bottom": {value: "5"}, "left": {value: "3"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/CathyMay.png"}
+});
+
+let cardJupiter = Object.create(cardFactory, {
+    "name": {value:"Jupiter"},
+    "top": {value: "5"}, "right": {value: "5"}, "bottom": {value: "5"}, "left": {value: "5"},
+    "tier": {value: "2"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/Jupiter.png"}
+});
+
+let cardBenFinegold = Object.create(cardFactory, {
+    "name": {value:"Ben Finegold"},
+    "top": {value: "1"}, "right": {value: "6"}, "bottom": {value: "1"}, "left": {value: "6"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/BenFinegold.png"}
+});
+
+let cardGFlatMajor = Object.create(cardFactory, {
+    "name": {value:"G flat major"},
+    "top": {value: "7"}, "right": {value: "3"}, "bottom": {value: "3"}, "left": {value: "6"},
+    "tier": {value: "2"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/gFlatMajor.png"}
+});
+
+let cardKanagawa = Object.create(cardFactory, {
+    "name": {value:"Great Wave"},
+    "top": {value: "4"}, "right": {value: "5"}, "bottom": {value: "6"}, "left": {value: "5"},
+    "tier": {value: "2"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/GreatWaveOffKanagawa.png"}
+});
+
+let cardFado = Object.create(cardFactory, {
+    "name": {value:"O Fado"},
+    "top": {value: "5"}, "right": {value: "4"}, "bottom": {value: "2"}, "left": {value: "2"},
+    "tier": {value: "3"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/oFado.png"}
+});
+
+let cardZhangZiyi = Object.create(cardFactory, {
+    "name": {value:"Zhang Ziyi"},
+    "top": {value: "6"}, "right": {value: "7"}, "bottom": {value: "7"}, "left": {value: "6"},
+    "tier": {value: "1"},
+    "status": {value: "", writable: true},
+    "image": {value: "./images/ZhangZiyi.png"}
+});
 
 
 // REMEMBER TO ADD TO THE ARRAY
 const cardArray = [cardDummy, cardAntónioCosta, cardJoca, cardKojima, cardSexHaver, card1984, cardShrike, cardMachoLatino, cardSaad, cardShrimpPizza, 
-    cardCuco, cardJoséFigueiras, cardFernandoMendes, cardHarambe, cardPluto];
+    cardCuco, cardJoséFigueiras, cardFernandoMendes, cardHarambe, cardPluto, cardGod, cardCathyMay, cardJupiter, cardBenFinegold, cardGFlatMajor, 
+cardKanagawa, cardFado, cardZhangZiyi];
 
 const tier3 = cardArray.filter((obj) => {return obj.tier === "3"})
 const tier2 = cardArray.filter((obj) => {return obj.tier === "2"});
 const tier1 = cardArray.filter((obj) => {return obj.tier === "1"});
+console.log(`Tier 3 : ${tier3.length}, Tier 2: ${tier2.length}, Tier 1: ${tier1.length}`)
 
 const opponents = (function () {
     
@@ -246,20 +311,23 @@ const board = (() => {
             if (item !== 0) {   
                 let cardOnBoard = cardDrawing.drawCard(square, boardState[squareNumber]);
                 if (boardState[squareNumber].status === "player") {cardOnBoard.classList.toggle("playerCard");};
-                if ((cardsFlipped.length > 0) && (cardsFlipped.indexOf(squareNumber) != -1)) {
+                if ((cardsFlipped.length > 0) && (cardsFlipped.indexOf(squareNumber) !== -1)) {
                     setTimeout(function() {cardOnBoard.classList.toggle("flip1")}, 20 + (index*(1)));  //we need a 20ms time out here
                     setTimeout(function() {cardOnBoard.classList.toggle("playerCard"); // we need 600ms time out here for these 2
                     cardOnBoard.classList.toggle("flip1")}, 600 + (index*1));
-                    cardsFlipped.forEach((item, index) => {
+                    cardsFlipped.forEach((item2, index2) => {
                         let flipDirection;
-                        if (boardState[item].status === "player") {
+                        if (boardState[item2].status === "player") {
                             flipDirection = "to opponent";
-                        } else if (boardState[item].status === "opponent") {
+                            console.log("if status player; squareNumber from flippedCards array:" + item2)
+                        } else if (boardState[item2].status === "opponent") {
                             flipDirection = "to player";
-                        } if (flipDirection === "to player") {boardState[item].status = "player"; console.log("we flipped" + item);
-                        } else if (flipDirection === "to opponent") {boardState[item].status = "opponent"; console.log("we flipped" + item);
+                            console.log("if status opponent; squareNumber from flippedCards array:" + item2)
+                        } if (flipDirection === "to player") {boardState[item2].status = "player"; console.log("we flipped" + item2);
+                        } else if (flipDirection === "to opponent") {boardState[item2].status = "opponent"; console.log("we flipped" + item2);
                         }
-                        cardsFlipped.splice(index, 1);
+                        console.log(cardsFlipped)
+                        cardsFlipped.splice(index2, 1);
                     });
                 };
 
@@ -366,14 +434,14 @@ const gameLogic = (() => {
             if ((typeof(boardState[squareNumber - 3]) === "object") && (parseInt(boardState[squareNumber].top) > parseInt(boardState[squareNumber - 3].bottom))) {
                 if (boardState[squareNumber - 3].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber - 3))};
             };
+            if ((typeof(boardState[squareNumber -1]) === "object") && (parseInt(boardState[squareNumber].left) > parseInt(boardState[squareNumber - 1].right))) {
+                if (boardState[squareNumber - 1].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber - 1))};
+            }
             if ((typeof(boardState[squareNumber + 1]) === "object") && (parseInt(boardState[squareNumber].right) > parseInt(boardState[squareNumber + 1].left))) {
                 if (boardState[squareNumber + 1].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber + 1))};
             }
             if ((typeof(boardState[squareNumber + 3]) === "object") && (parseInt(boardState[squareNumber].bottom) > parseInt(boardState[squareNumber + 3].top))) {
                 if (boardState[squareNumber + 3].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber + 3))};
-            }
-            if ((typeof(boardState[squareNumber -1]) === "object") && (parseInt(boardState[squareNumber].left) > parseInt(boardState[squareNumber - 1].right))) {
-                if (boardState[squareNumber - 1].status !== boardState[squareNumber].status) {cardsFlipped.push((squareNumber - 1))};
             }
         } if ((squareNumber == 2) | (squareNumber == 5) | (squareNumber == 8)) {
             if ((typeof(boardState[squareNumber - 3]) === "object") && (parseInt(boardState[squareNumber].top) > parseInt(boardState[squareNumber - 3].bottom))) {
@@ -730,9 +798,8 @@ const minorMenuMethods = (() => {
                             pickableCard.classList.toggle("flip1");
                         }, 600);
                         setTimeout(function(){
-            
-                            menuing.drawMainMenu();
                             if(currentOpponent.level === "8") {minorMenuMethods.stopBossAudio(); gameBeaten = 1;} else {minorMenuMethods.stopAudio();}
+                            menuing.drawMainMenu();
                             
                 
                         }, 3000);
@@ -857,8 +924,8 @@ function specialGenerateCardHand (player, cardSet, owner) {
         player.appendChild(currentCard);
         let hiddenText = document.createElement("p");
         let hiddenMessages = ["fuck off, mate", "you've cheated long enough", "for real, stop", "i'm not gonna show you", "you're pathetic", 
-        "is this the only way you can win?", "yikes", "sorry, not sorry", "ok, fine, just click and I'll show you", "lorem ipsum dolor just kidding lmao", 
-        "look at your own hand", "don't look at mine", "stay away", "i'm telling the teacher", "só assim crl"]
+        "is this the only way you can win?", "yikes", "you're so annoying", "have you been peeking this whole time?", "ok, fine, just click and I'll show you", 
+        "lorem ipsum dolor just kidding lmao", "look at your own hand", "don't look at mine", "stay away", "i'm telling the teacher", "só assim crl"]
         hiddenText.textContent = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
         currentCard.classList.toggle("isInHand");
         currentCard.appendChild(hiddenText);
@@ -1039,9 +1106,10 @@ let gameBeaten = 0;
 
 //for testing, function to unlock all levels:
 
-for (let i = 0; i < 8; i++) {opponents.opponentArray[i].unlocked = "yes"}
+//for (let i = 0; i < 8; i++) {opponents.opponentArray[i].unlocked = "yes"}
 
 //menuing.drawMainMenu(); //REMEMBER TO HIDE THE EDITDECKMENU IN THE MODULE
+let allCards = function() {playerCardArray = cardArray; playerCardArray.splice(0,1)};
 
 
 
