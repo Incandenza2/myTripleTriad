@@ -1138,7 +1138,7 @@ const openingScreen = function() {
         openingText.textContent = "Here's your starting set. Go nuts.";
     }, 500);
         setTimeout(function() {menuing.drawMainMenu()}, 7000);
-    })
+    }, {once: true})
 };
 
 openingScreen();
