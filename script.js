@@ -985,7 +985,7 @@ const menuing = (() => {
         let mainMenuFrame = dom.addElement("#content", "div", "mainMenuFrame");
         let deckBuildingDiv = dom.addElement(".mainMenuFrame", "div", "deckBuildingDiv");
         let deckSelect = dom.addElement(".deckBuildingDiv", "button", "deckSelect");
-        deckSelect.textContent = "Edit deck";
+        deckSelect.textContent = `Change cards (${playerCardArray.length})`;
         deckSelect.addEventListener("click", () => {
             editDeckMenu();
         });
@@ -1109,7 +1109,7 @@ let gameBeaten = 0;
 //for (let i = 0; i < 8; i++) {opponents.opponentArray[i].unlocked = "yes"}
 
 //menuing.drawMainMenu(); //REMEMBER TO HIDE THE EDITDECKMENU IN THE MODULE
-let allCards = function() {playerCardArray = cardArray; playerCardArray.splice(0,1)};
+let allCards = function() {playerCardArray = cardArray.map((x) => x); playerCardArray.splice(0,1)};
 
 
 

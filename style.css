@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     user-select: none;
-    background: linear-gradient(rgba(25, 128, 224, 0.397), rgba(228, 98, 120, 0.438)), url(./images/Patterns/fancy-cushion.png);
+    background: linear-gradient(rgba(0, 54, 26, 0.83), rgba(45, 70, 46, 0.75)), url(./images/Patterns/paper/handmadepaper.png);
     background-size: 650px;
     transition: filter 2s;
 }
@@ -151,7 +151,8 @@ body {
 }
 
 .result {
-    margin-left: -60px;
+    margin-left: -50px;
+    margin-bottom: 40px;
     text-justify: center;
     position:absolute;
     align-self: center;
@@ -192,7 +193,7 @@ body {
     height:auto;
     width: auto;
     gap: 10px;
-    margin-bottom: 120px;
+    margin-bottom: 150px;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.8s;
@@ -210,6 +211,7 @@ body {
 
 .deckBuildingDiv {
     display:flex;
+    margin-top: 40px;
     justify-content: center;
     width: 1000px;
     height: 300px;
@@ -219,8 +221,12 @@ body {
 }
 
 .deckSelect {
-    height: 60px;
-    width: auto;
+    height: max-content;
+    width: max-content;
+    padding: 10px;
+    background-color: #114869;
+    color: #b3cbdf;
+    border-color: #2b70ad;
 }
 
 .deckDisplay {
@@ -229,13 +235,13 @@ body {
 }
 
 .levelLibrary {
-    margin: 16px;
+    margin-top: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    width: 1200px;
-    height: 300px;
+    width: 1300px;
+    height: 150px;
     gap: 16px;
 }
 
@@ -245,17 +251,18 @@ body {
     align-items: center;
     border-style: double;
     border-color: wheat;
+    border-radius:20px;
 
 }
 
 .locked {
-    width: 120px;
-    height: 60px;
+    width:259px;
+    height:50px;
 }
 
 .unlocked {
-    width:120px;
-    height:60px;
+    width:259px;
+    height:50px;
 }
 
 .displayedCard {
@@ -270,13 +277,20 @@ body {
 }
 
 .returnToMenu {
-    width: 50px;
-    height: 50px;
+    width: max-content;
+    height: max-content;
+    padding: 10px;
     margin-top: 16px;
+    margin-right: -52px;
+    background-color: #114869;
+    color: #b3cbdf;
+    border-color: #2b70ad;
 }
 
 button {
-    background-color:thistle;
+    background-color:#e0cfb4;
+    border-radius:20px;
+    font-size: 18px;
 }
 
 .deckEditingBox {
@@ -312,7 +326,7 @@ button {
 }
 
 .pickedCardsShown {
-    padding-top: 20px;
+    padding-top: 10px;
     display:flex;
     flex-wrap: wrap;
     border-color: white;
@@ -329,7 +343,7 @@ button {
 }
 
 .pickedCardsShown .cardBoxInEditing {
-    margin-bottom: -160px;
+    margin-bottom: -164px;
     position:relative;
 }
 
@@ -361,7 +375,11 @@ button {
 }
 
 .saveChangesButton {
-
+    background-color: #114869;
+    color: #fff;
+    border-color: #2b70ad;
+    height:60px;
+    border-radius: 0px;
 }
 
 .openingFrame {
@@ -370,7 +388,6 @@ button {
     justify-content: center;
     align-items: center;
     height:600px;
-    width: 1200px;
     gap: 100px;
 
 }
@@ -403,6 +420,6 @@ button {
 
 .openingText {
     font-size: 30px;
-    color:rgb(41, 135, 163);
+    color:rgb(255, 255, 255);
     text-shadow: rgb(71, 8, 8) 2px 2px;
 }
